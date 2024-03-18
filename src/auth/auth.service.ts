@@ -27,7 +27,7 @@ export class AuthService {
       );
     }
 
-    return await this.usersService.create({
+    await this.usersService.create({
       name,
       email,
       password: await hash(password, 10), // el segundo parámetro son saltos o palabras aleatorias al momento de encriptar o hashear para que si una contraseña es igual a otra, no tengan el mismo hash (se recomienda dejar alto por seguridad)
@@ -35,6 +35,12 @@ export class AuthService {
       status: 'active',
       deleted_at: null,
     });
+
+    return {
+      message: 'Usuario creado con éxito',
+      name,
+      email,
+    };
   }
 
   async login({ email, password }: LoginDto) {
@@ -51,7 +57,7 @@ export class AuthService {
       throw new UnauthorizedException('Email o contraseña incorrectos');
     }
 
-    const payload = { email: user.email };
+    const payload = { email: user.email, role: user.role };
 
     const token = await this.jwtService.signAsync(payload);
 
@@ -59,5 +65,10 @@ export class AuthService {
       token,
       email,
     };
+  }
+
+  async profile({ email, role }: { email: string; role: string }) {
+    // return { email, role };
+    if (role) return await this.usersService.findOneByEmail(email);
   }
 }

@@ -5,6 +5,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { Role } from 'src/common/enums/rol.enum';
 
 export class CreateUserDto {
   // @IsInt()
@@ -21,7 +22,7 @@ export class CreateUserDto {
   readonly password: string;
   @IsString()
   @IsOptional()
-  readonly role: string;
+  readonly roles: Role[];
   @IsBoolean()
   @IsOptional()
   readonly status: string;

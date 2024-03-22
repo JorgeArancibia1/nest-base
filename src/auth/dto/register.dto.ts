@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { Role } from '../../common/enums/rol.enum';
 
 export class RegisterDto {
   @Transform(({ value }) => value.trim())
@@ -21,7 +22,7 @@ export class RegisterDto {
 
   @IsString()
   @IsOptional()
-  readonly role: string;
+  readonly role: Role[];
   @IsBoolean()
   @IsOptional()
   readonly status: string;

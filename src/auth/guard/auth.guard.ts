@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log(request.headers.authorization);
 
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -22,6 +21,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
+      // Aqui se decifra o decodifica el token y se guarda en payload
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });

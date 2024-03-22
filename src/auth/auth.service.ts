@@ -8,6 +8,7 @@ import { RegisterDto } from './dto/register.dto';
 import { hash, compare } from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '../common/enums/rol.enum';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
       name,
       email,
       password: await hash(password, 10), // el segundo parámetro son saltos o palabras aleatorias al momento de encriptar o hashear para que si una contraseña es igual a otra, no tengan el mismo hash (se recomienda dejar alto por seguridad)
-      role: 'user',
+      roles: [Role.USER],
       status: 'active',
       deleted_at: null,
     });
@@ -44,7 +45,7 @@ export class AuthService {
   }
 
   async login({ email, password }: LoginDto) {
-    const user = await this.usersService.findOneByEmail(email);
+    const user = await this.usersService.findByEmailwithPassword(email);
 
     if (!user) {
       throw new UnauthorizedException('Email o contraseña incorrectos');
@@ -57,7 +58,7 @@ export class AuthService {
       throw new UnauthorizedException('Email o contraseña incorrectos');
     }
 
-    const payload = { email: user.email, role: user.role };
+    const payload = { email: user.email, roles: [user.roles] };
 
     const token = await this.jwtService.signAsync(payload);
 
@@ -67,8 +68,8 @@ export class AuthService {
     };
   }
 
-  async profile({ email, role }: { email: string; role: string }) {
+  async profile({ email, roles }: { email: string; roles: Role[] }) {
     // return { email, role };
-    if (role) return await this.usersService.findOneByEmail(email);
+    if (roles) return await this.usersService.findOneByEmail(email);
   }
 }

@@ -1,9 +1,5 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Role } from '../../common/enums/rol.enum';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -23,11 +19,22 @@ export class User {
   })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255, name: 'password' })
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    length: 255,
+    name: 'password',
+    select: false,
+  })
   password: string;
 
-  @Column({ type: 'varchar', length: 255, name: 'role', default: 'user' })
-  role: string;
+  @Column({
+    type: 'enum',
+    name: 'roles',
+    default: [Role.USER],
+    enum: Role,
+  })
+  roles: Role[];
 
   // @Column({ type: 'datetime', name: 'created_at' })
   // created_at: Date;
@@ -35,6 +42,6 @@ export class User {
   // @Column({ type: 'datetime', name: 'updated_at' })
   // updated_at: Date;
 
-  @DeleteDateColumn({ type: 'datetime', name: 'deleted_at' })
-  deleted_at: Date;
+  // @DeleteDateColumn({ type: 'datetime', name: 'deleted_at' })
+  // deleted_at: Date;
 }

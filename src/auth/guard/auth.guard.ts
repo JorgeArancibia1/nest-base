@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { jwtConstants } from '../constants/jwt.constant';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -22,9 +21,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       // Aqui se decifra o decodifica el token y se guarda en payload
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
-      });
+      const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
     } catch (error) {
       throw new UnauthorizedException('Token inválido, usuario no autorizado.');

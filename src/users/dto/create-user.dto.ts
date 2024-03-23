@@ -28,5 +28,5 @@ export class CreateUserDto {
   readonly status: string;
   // readonly created_at: Date;
   // readonly updated_at: Date;
-  readonly deleted_at: Date;
+  // readonly deleted_at: Date;
 }

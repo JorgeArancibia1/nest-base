@@ -34,7 +34,6 @@ export class AuthService {
       password: await hash(password, 10), // el segundo parámetro son saltos o palabras aleatorias al momento de encriptar o hashear para que si una contraseña es igual a otra, no tengan el mismo hash (se recomienda dejar alto por seguridad)
       roles: [Role.USER],
       status: 'active',
-      deleted_at: null,
     });
 
     return {

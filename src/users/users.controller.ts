@@ -12,7 +12,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/rol.enum';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: 'Usuario no autorizado' })
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -28,6 +38,8 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @ApiCreatedResponse({ description: 'Usuario encontrado!' })
+  @ApiForbiddenResponse({ description: 'Usuario no encontrado!' })
   @Auth([Role.ADMIN])
   @Get(':id')
   findOne(@Param('id') id: number) {
